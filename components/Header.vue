@@ -2,7 +2,10 @@
   <nav class="header flex a-center">
     <div class="flex a-center j-between w-100">
       <LinkHome />
-      <div class="link">
+      <div v-if="user">
+        <p class="pointer" @click="signOut">Cerrar Sesión</p>
+      </div>
+      <div class="link" v-else>
         <NuxtLink to="/register">Register</NuxtLink>
         <NuxtLink to="/login">Login</NuxtLink>
       </div>
@@ -11,7 +14,21 @@
 </template>
 
 <script>
-export default {}
+import { signout } from '~/utils/index';
+
+export default {
+  data() {
+    return {
+      user: this.$auth.user,
+    }
+  },
+  methods: {
+    signOut() {
+      signout();
+      this.$router.push("/login");
+    }
+  }
+}
 </script>
 
 <style>
