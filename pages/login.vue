@@ -1,12 +1,14 @@
 <template>
   <div>
-    <input v-model="email" label="Email" />
-    <input
-      v-model="password"
-      label="Password"
-      type="password"
-    />
-    <button @click="handleLoginClicked">Login</button>
+    <form @submit.prevent="loginUser">
+      <label for="email">Email</label>
+      <input type="text" v-model="email" required />
+      <span v-if="errors.email">{{ errors.email }}</span>
+      <label for="password">Password</label>
+      <input type="password" v-model="password" required />
+      <span v-if="errors.password">{{ errors.password }}</span>
+      <button type="submit">Login</button>
+    </form>
   </div>
 </template>
 
@@ -18,22 +20,37 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      errors: {}
+    }
+  },
+  watch: {
+    email(value) {
+      this.email = value;
+      this.validateEmail(value);
+    },
+    password(value) {
+      this.password = value;
+      this.validatePassword(value);
     }
   },
   methods: {
-    async handleLoginClicked() {
-      try {
-        const response = await this.$auth.loginWith('local', {
-          data: { user: { email: this.email, password: this.password } }
-        })
-        console.log(response)
-        if (response.data.success) {
-          this.$router.replace({ name: 'blogs' })
-        }
-      } catch (err) {
-        console.log(err)
+    validateEmail(value) {
+      if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+        this.errors['email'] = '';
+      } else {
+        this.errors['email'] = 'Invalid Email Address';
+      } 
+    },
+    validatePassword(value) {
+      if (value.length === 0) {
+        this.errors['password'] = 'Password required';
+      } else {
+        this.errors['password'] = '';
       }
+    },
+    loginUser() {
+      alert('login');
     }
   }
 }
