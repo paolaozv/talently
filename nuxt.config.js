@@ -49,21 +49,24 @@ export default {
     redirect: {
       login: '/login',
       logout: '/',
+      home: '/lessons',
     },
     strategies: {
       local: {
+        token: {
+          property: 'access_token',
+          required: true,
+          type: 'Bearer',
+        },
         endpoints: {
           login: {
-            url: '/login',
+            url: 'auth/login',
             method: 'post',
-            propertyName: 'token',
+            propertyName: 'access_token',
           },
           logout: false,
-          user: false,
+          user: { url: 'auth/me', method: 'post', propertyName: false },
         },
-        tokenType: '',
-        tokenName: 'x-auth',
-        autoFetchUser: false,
       },
     },
   },
@@ -74,7 +77,7 @@ export default {
   // Loading between pages
   loading: {
     color: '#30308C',
-    height: '10px',
+    height: '5px',
   },
 
   // loading

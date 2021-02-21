@@ -33,6 +33,24 @@ html {
   margin: 0;
 }
 
+button,
+input[type='submit'],
+input[type='reset'] {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+body {
+  background-color: #ecf1f6;
+  width: 100%;
+  min-height: 100vh;
+}
+
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.5s;
@@ -41,4 +59,72 @@ html {
 .page-enter,
 .page-leave-to {
   opacity: 0;
+}
+
+.container {
+  max-width: 1200px;
+  min-height: 100vh;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.margin-auto {
+  margin: 0 auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.a-center {
+  align-items: center;
+}
+
+.j-center {
+  justify-content: center;
+}
+
+.j-between {
+  justify-content: space-between;
+}
+
+.d-column {
+  flex-direction: column;
+}
+
+.input {
+  height: 37px;
+  width: 263px;
+  border-radius: 4px;
+  border: 1px solid #cbcbcb;
+}
+
+.error-input {
+  color: #ff0000;
+  font-size: 9px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: 400;
+  margin: 8px;
+}
+
+.button-form {
+  width: 263px;
+  height: 37px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #30308c;
+}
+
+.mb-15 {
+  margin-bottom: 15px;
+}
+
+.w-100 {
+  width: 100%;
 }

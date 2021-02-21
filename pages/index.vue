@@ -1,12 +1,6 @@
 <template>
   <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        talently
-      </h1>
-      <NuxtLink to="/login">Login</NuxtLink>
-    </div>
+    <h1>Talently Challenge</h1>
   </div>
 </template>
 

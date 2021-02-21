@@ -1,22 +1,39 @@
 <template>
-  <div>
-    <form @submit.prevent="registerUser">
-      <label for="name">Name</label>
-      <input type="text" v-model="name" required />
-      <label for="email">Email</label>
-      <input type="text" v-model="email" required />
-      <span v-if="errors.email">{{ errors.email }}</span>
-      <label for="password">Password</label>
-      <input type="password" v-model="password" required />
-      <span v-if="errors.password">{{ errors.password }}</span>
-      <button type="submit">Login</button>
-      <p v-if="loading">Please wait....</p>
-    </form>
+  <div class="container flex a-center j-center">
+    <div class="form-container">
+      <div class="logo">
+        <LinkHome />
+      </div>
+      <form @submit.prevent="registerUser" class="flex d-column j-center">
+        <div class="mb-15">
+          <label for="name">Name</label>
+          <input type="text" v-model="name" required class="input" />
+          <span v-if="errors.name" class="error-input">{{ errors.name }}</span>
+        </div>
+        <div class="mb-15">
+          <label for="email">Email</label>
+          <input type="text" v-model="email" required class="input" />
+          <span v-if="errors.email" class="error-input">{{ errors.email }}</span>
+        </div>
+        <div class="mb-15">
+          <label for="password">Password</label>
+          <input type="password" v-model="password" required class="input" />
+          <span v-if="errors.password" class="error-input">{{ errors.password }}</span>
+        </div>
+        <button type="submit" class="button-form submit">Login</button>
+        <p v-if="loading">Please wait....</p>
+      </form>
+      <p class="link text-center">
+        ¿Ya tienes cuenta?
+        <NuxtLink to="/login">Inicia sesión</NuxtLink>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  layout: 'login-register',
   head: {
     title: 'Register'
   },
@@ -76,24 +93,33 @@ export default {
         await this.$axios.post("auth/register", data);
         this.$router.push("/login");
         this.loading = false;
-        this.$notify({
-          group: "success",
-          title: "Success!",
-          text: "Account created successfully"
-        });
       } catch (error) {
         this.loading = false;
-        this.$notify({
-          group: "error",
-          title: "Error!",
-          text: error.response
-            ? error.response.data.error
-            : "Sorry an error occured, check your internet"
-        });
       }
     }
   }
 }
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.form-container {
+  min-height: 425px;
+  width: 313px;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 25px;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.submit {
+  margin: 15px 0;
+}
+
+.link {
+  font-size: 12px;
+}
+</style>
