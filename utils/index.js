@@ -18,3 +18,18 @@ export const signout = async () => {
   removeCookie('auth._token.local')
   removeLocalStorage('auth._token.local')
 }
+
+export const setActualContent = (content) => {
+  const uncompleted = content.filter((el) => el.progress === 0)
+  const firstUncompleted = uncompleted.length > 0 ? uncompleted[0] : content[0]
+  return firstUncompleted
+}
+
+export const updateProgress = (progress, previousProgress) => {
+  if (progress > 0) {
+    return true
+  } else if (progress > previousProgress) {
+    return true
+  }
+  return false
+}

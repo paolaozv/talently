@@ -28,7 +28,7 @@ export default {
   css: ['~/assets/main.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ src: `~plugins/vimeo-player` }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -72,7 +72,9 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    vendor: ['vue-vimeo-player'],
+  },
 
   // Loading between pages
   loading: {
