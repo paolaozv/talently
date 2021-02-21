@@ -2,7 +2,7 @@
   <nav class="header flex a-center">
     <div class="flex a-center j-between w-100">
       <LinkHome />
-      <div v-if="user">
+      <div v-if="loggedIn">
         <p class="pointer" @click="signOut">Cerrar Sesión</p>
       </div>
       <div class="link" v-else>
@@ -14,18 +14,16 @@
 </template>
 
 <script>
-import { signout } from '~/utils/index';
-
 export default {
   data() {
     return {
-      user: this.$auth.user,
+      loggedIn: this.$auth.loggedIn,
     }
   },
   methods: {
-    signOut() {
-      signout();
-      this.$router.push("/login");
+    async signOut() {
+      await this.$auth.logout();
+      window.location.href = '/';
     }
   }
 }

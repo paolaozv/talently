@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  // middleware: 'checkauth',
   layout: 'login-register',
   head: {
     title: 'Register'

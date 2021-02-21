@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  // middleware: 'auth',
+  // middleware: 'checkauth',
   layout: 'login-register',
   head: {
     title: 'Login'
@@ -80,13 +80,14 @@ export default {
         });
         this.loading = false;
         this.$nuxt.$loading.finish();
+        this.$router.push("/lessons");
       } catch (error) {
         this.loading = false;
         this.error = error;
         this.$nuxt.$loading.finish();
       }
     }
-  }
+  },
 }
 </script>
 
