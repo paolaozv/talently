@@ -45,7 +45,6 @@ export default {
     onProgress(event, data, player) {
       const progress = Math.round(event.percent * 10)
       if (updateProgress(progress, this.actualContent.progress)) {
-        console.log('si?', progress)
         this.$store.dispatch('UPDATE_PROGRESS', { ...this.actualContent, progress })
       }
     }

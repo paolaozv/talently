@@ -13,14 +13,9 @@ export const mutations = {
     state.actualContent = content
   },
   UPDATE_CONTENT(state, content) {
-    // const update = state.content.map((el) => {
-    //   if (el.id === content.id) {
-    //     el.progress = content.progress
-    //   }
-    // })
-    console.log(state)
+    const index = state.content.content.findIndex((obj) => obj.id == content.id)
+    state.content.content[index].progress = content.progress
     state.actualContent = content
-    // state.content = update
   },
   UPDATE_ACTUAL_CONTENT(state, content) {
     state.actualContent = content

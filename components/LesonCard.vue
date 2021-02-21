@@ -5,7 +5,7 @@
       <div v-for="cont in content" :key="cont.id" :class="{'lesson': true, 'active': actualContent.id === cont.id}" @click="updateContent(cont)" >
         <div class="player">
           <client-only>
-            <vimeo-player @ready="onReady" ref="player" :video-id="cont.video_url" :player-height="height" :player-width="width" />
+            <vimeo-player @ready="onReady" ref="player" :video-id="cont.video_url" :player-height="height" :player-width="width" :options="options" />
           </client-only>
         </div>
         <div class="content">
@@ -37,7 +37,10 @@ export default {
     return {
       height: 62,
       width: 80,
-      playerReady: false
+      playerReady: false,
+      options: {
+				controls: false,
+			},
     }
   },
   props: {
