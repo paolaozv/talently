@@ -3,6 +3,7 @@ import { postData } from '~/utils/store'
 export const state = () => ({
   content: [],
   actualContent: null,
+  comments: [],
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
   UPDATE_ACTUAL_CONTENT(state, content) {
     state.actualContent = content
   },
+  SET_COMMENTS(state, comments) {
+    state.comments = comments
+  },
 }
 
 export const actions = {
@@ -28,9 +32,15 @@ export const actions = {
     commit('SET_CONTENT', content)
   },
   async UPDATE_PROGRESS({ commit }, content) {
+    // Next line is before the axios call to avoid making 2 requests. Normally
+    // it should be after the call to the server.
+    commit('UPDATE_CONTENT', content)
     await this.$axios.post(`content/${content.id}/progress`, {
       progress: content.progress,
     })
-    commit('UPDATE_CONTENT', content)
+  },
+  async GET_COMMENTS({ commit }, content) {
+    const data = await postData(`content/${content.id}/comments`, this.$axios)
+    // commit('SET_COMMENTS', content)
   },
 }

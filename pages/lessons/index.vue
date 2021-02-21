@@ -2,14 +2,17 @@
   <div>
     <div class="container-lessons" v-if="content.length > 0">
       <div class="container-content">
-        <div class="container-video">
-          <client-only>
-            <vimeo-player @ready="onReady" @timeupdate="onProgress" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
-          </client-only>
-          <div class="text-content">
-            <h2>Clase {{ actualContent.id }}</h2>
-            <p>{{ actualContent.article.slice(0, 200) }}</p>
+        <div>
+          <div class="container-video">
+            <client-only>
+              <vimeo-player @ready="onReady" @timeupdate="onTimeUpdate" @loaded="onLoaded" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
+            </client-only>
+            <div class="text-content">
+              <h2>Clase {{ actualContent.id }}</h2>
+              <p>{{ actualContent.article.slice(0, 200) }}</p>
+            </div>
           </div>
+          <i-comments :actualContent="actualContent" />
         </div>
         <i-lessoncard :content="content" :actualContent="actualContent" />
       </div>
@@ -20,6 +23,7 @@
 
 <script>
 import LesonCard from "~/components/LesonCard.vue";
+import Comments from "~/components/Comments";
 import { setActualContent, updateProgress } from "~/utils/index";
 
 export default {
@@ -37,15 +41,26 @@ export default {
   },
   components: {
     "i-lessoncard": LesonCard,
+    "i-comments": Comments
   },
   methods: {
     onReady() {
 			this.playerReady = true
 		},
-    onProgress(event, data, player) {
-      const progress = Math.round(event.percent * 10)
+    onTimeUpdate(data, player) {
+      console.log(data, player)
+      const progress = Math.floor(data.percent * 10)
       if (updateProgress(progress, this.actualContent.progress)) {
         this.$store.dispatch('UPDATE_PROGRESS', { ...this.actualContent, progress })
+      }
+    },
+    async onLoaded(data, player) {
+      try {
+        const totalDurationSeconds = await player.getDuration();
+        const progressTime = totalDurationSeconds / 10 * this.actualContent.progress;
+        await player.setCurrentTime(progressTime)
+      } catch (err) {
+        console.log("Could not set the progress time", err)
       }
     }
   },
