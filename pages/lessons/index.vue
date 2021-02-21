@@ -3,18 +3,20 @@
     <div class="container-lessons" v-if="content.length > 0">
       <div class="container-content">
         <div>
-          <div class="container-video">
-            <client-only>
-              <vimeo-player @ready="onReady" @timeupdate="onTimeUpdate" @loaded="onLoaded" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
-            </client-only>
+          <div class="container-video" :key="currentContent.id">
+            <div class="video">
+              <client-only>
+                <vimeo-player @ready="onReady" @timeupdate="onTimeUpdate" @loaded="onLoaded" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
+              </client-only>
+            </div>
             <div class="text-content">
-              <h2>Clase {{ actualContent.id }}</h2>
-              <p>{{ actualContent.article.slice(0, 200) }}</p>
+              <h2>Clase {{ currentContent.id }}</h2>
+              <p>{{ currentContent.article.slice(0, 200) }}</p>
             </div>
           </div>
-          <i-comments :actualContent="actualContent" />
+          <i-comments :currentContent="currentContent" />
         </div>
-        <i-lessoncard :content="content" :actualContent="actualContent" />
+        <i-lessoncard :content="content" :currentContent="currentContent" />
       </div>
     </div>
     <div v-else>No hay datos para mostrar</div>
@@ -24,7 +26,7 @@
 <script>
 import LesonCard from "~/components/LesonCard.vue";
 import Comments from "~/components/Comments";
-import { setActualContent, updateProgress } from "~/utils/index";
+import { setcurrentContent, updateProgress } from "~/utils/index";
 
 export default {
   middleware: 'auth',
@@ -50,14 +52,14 @@ export default {
     onTimeUpdate(data, player) {
       console.log(data, player)
       const progress = Math.floor(data.percent * 10)
-      if (updateProgress(progress, this.actualContent.progress)) {
-        this.$store.dispatch('UPDATE_PROGRESS', { ...this.actualContent, progress })
+      if (updateProgress(progress, this.currentContent.progress)) {
+        this.$store.dispatch('UPDATE_PROGRESS', { ...this.currentContent, progress })
       }
     },
     async onLoaded(data, player) {
       try {
         const totalDurationSeconds = await player.getDuration();
-        const progressTime = totalDurationSeconds / 10 * this.actualContent.progress;
+        const progressTime = totalDurationSeconds / 10 * this.currentContent.progress;
         await player.setCurrentTime(progressTime)
       } catch (err) {
         console.log("Could not set the progress time", err)
@@ -66,21 +68,21 @@ export default {
   },
   async asyncData({ store }) {
     await store.dispatch('GET_CONTENT').then(() => {
-      const actualContent = setActualContent(store.state.content.content);
-      store.commit('SET_ACTUAL_CONTENT', actualContent)
+      const currentContent = setcurrentContent(store.state.content.content);
+      store.commit('SET_CURRENT_CONTENT', currentContent)
     })
   },
   computed: {
     content() {
       return this.$store.state.content.content
     },
-    actualContent() {
-      return this.$store.state.actualContent
+    currentContent() {
+      return this.$store.state.currentContent
     },
     videoID() {
       // id vimeo video
-      // const id = this.$store.state.actualContent.video_url.split('/')?.[3]
-      return this.$store.state.actualContent.video_url
+      // const id = this.$store.state.currentContent.video_url.split('/')?.[3]
+      return this.$store.state.currentContent.video_url
     }
   }
 }
@@ -103,6 +105,10 @@ export default {
 .container-video {
   width: 715px;
   background: #fff;
+  border-radius: 4px
+}
+.video {
+  height: 402px;
 }
 .text-content {
   padding: 20px;

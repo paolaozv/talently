@@ -12,7 +12,7 @@ export default {
   //   }
   // },
   props: {
-    actualContent: {
+    currentContent: {
       type: Object,
       required: true
     }

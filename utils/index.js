@@ -19,7 +19,7 @@ export const signout = async () => {
   removeLocalStorage('auth._token.local')
 }
 
-export const setActualContent = (content) => {
+export const setcurrentContent = (content) => {
   const uncompleted = content.filter((el) => el.progress === 0)
   const firstUncompleted = uncompleted.length > 0 ? uncompleted[0] : content[0]
   return firstUncompleted

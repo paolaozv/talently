@@ -2,7 +2,7 @@ import { postData } from '~/utils/store'
 
 export const state = () => ({
   content: [],
-  actualContent: null,
+  currentContent: null,
   comments: [],
 })
 
@@ -10,16 +10,16 @@ export const mutations = {
   SET_CONTENT(state, content) {
     state.content = content
   },
-  SET_ACTUAL_CONTENT(state, content) {
-    state.actualContent = content
+  SET_CURRENT_CONTENT(state, content) {
+    state.currentContent = content
   },
   UPDATE_CONTENT(state, content) {
     const index = state.content.content.findIndex((obj) => obj.id == content.id)
     state.content.content[index].progress = content.progress
-    state.actualContent = content
+    state.currentContent = content
   },
-  UPDATE_ACTUAL_CONTENT(state, content) {
-    state.actualContent = content
+  UPDATE_CURRENT_CONTENT(state, content) {
+    state.currentContent = content
   },
   SET_COMMENTS(state, comments) {
     state.comments = comments

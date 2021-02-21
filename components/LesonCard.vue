@@ -2,7 +2,7 @@
   <div class="container-lesson">
     <h3>Contenido</h3>
     <div v-if="content.length > 0">
-      <div v-for="cont in content" :key="cont.id" :class="{'lesson': true, 'active': actualContent.id === cont.id}" @click="updateContent(cont)" >
+      <div v-for="cont in content" :key="cont.id" :class="{'lesson': true, 'active': currentContent.id === cont.id}" @click="updateContent(cont)" >
         <div class="player">
           <client-only>
             <vimeo-player @ready="onReady" ref="player" :video-id="cont.video_url" :player-height="height" :player-width="width" :options="options" />
@@ -48,7 +48,7 @@ export default {
       type: Array,
       required: true
     },
-    actualContent: {
+    currentContent: {
       type: Object,
       required: true
     }
@@ -58,7 +58,7 @@ export default {
 			this.playerReady = true
 		},
     updateContent(content) {
-      this.$store.commit('UPDATE_ACTUAL_CONTENT', content)
+      this.$store.commit('UPDATE_CURRENT_CONTENT', content)
     }
   }
 }
@@ -70,6 +70,7 @@ export default {
   width: 332px;
   height: auto;
   padding: 20px;
+  border-radius: 4px;
 }
 .lesson {
   display: flex;
