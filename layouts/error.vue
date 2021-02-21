@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <div>
-      <Logo />
-      <p>Error</p>
-      <NuxtLink to="/">Home</NuxtLink>
-    </div>
+  <div class="container">
+      <p>Page not found</p>
   </div>
 </template>
 

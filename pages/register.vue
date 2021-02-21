@@ -5,22 +5,23 @@
         <LinkHome />
       </div>
       <form @submit.prevent="registerUser" class="flex d-column j-center">
-        <div class="mb-15">
+        <div class="mb-15 text-left">
           <label for="name">Name</label>
           <input type="text" v-model="name" required class="input" />
           <span v-if="errors.name" class="error-input">{{ errors.name }}</span>
         </div>
-        <div class="mb-15">
+        <div class="mb-15 text-left">
           <label for="email">Email</label>
           <input type="text" v-model="email" required class="input" />
           <span v-if="errors.email" class="error-input">{{ errors.email }}</span>
         </div>
-        <div class="mb-15">
+        <div class="mb-15 text-left">
           <label for="password">Password</label>
           <input type="password" v-model="password" required class="input" />
           <span v-if="errors.password" class="error-input">{{ errors.password }}</span>
         </div>
-        <button type="submit" class="button-form submit">Login</button>
+        <span v-if="error" class="error-input">{{ error }}</span>
+        <button type="submit" class="button-form submit">Register</button>
         <p v-if="loading">Please wait....</p>
       </form>
       <p class="link text-center">
@@ -43,7 +44,8 @@ export default {
       name: '',
       email: '',
       password: '',
-      errors: {}
+      errors: {},
+      error: ''
     }
   },
   watch: {
@@ -90,11 +92,18 @@ export default {
         password: this.password
       };
       try {
-        await this.$axios.post("auth/register", data);
-        this.$router.push("/login");
+        const res = await this.$axios.post("auth/register", data);
         this.loading = false;
+        if (res && res.data && res.data.success) {
+          this.$router.push("/login");
+        } else {
+          this.error = res.data.errors && res.data.errors.email ?
+                      res.data.errors.email[0] :
+                      res.data.errors.password[0];
+        }
       } catch (error) {
         this.loading = false;
+        this.error = error;
       }
     }
   }

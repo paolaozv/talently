@@ -5,16 +5,17 @@
         <LinkHome />
       </div>
       <form @submit.prevent="loginUser" class="flex d-column j-center">
-        <div class="mb-15">
+        <div class="mb-15 text-left">
           <label for="email">Email</label>
           <input type="text" v-model="email" required class="input" />
           <span v-if="errors.email" class="error-input">{{ errors.email }}</span>
         </div>
-        <div class="mb-15">
+        <div class="mb-15 text-left">
           <label for="password">Password</label>
           <input type="password" v-model="password" required class="input" />
           <span v-if="errors.password" class="error-input">{{ errors.password }}</span>
         </div>
+        <span v-if="error" class="error-input">{{ error }}</span>
         <button class="button-form submit" type="submit">Login</button>
       </form>
       <p class="link text-center">
@@ -37,7 +38,8 @@ export default {
       loading: false,
       email: '',
       password: '',
-      errors: {}
+      errors: {},
+      error: ''
     }
   },
   watch: {
@@ -80,6 +82,7 @@ export default {
         this.$nuxt.$loading.finish();
       } catch (error) {
         this.loading = false;
+        this.error = error;
         this.$nuxt.$loading.finish();
       }
     }

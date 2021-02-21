@@ -71,6 +71,10 @@ body {
   text-align: center;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .margin-auto {
   margin: 0 auto;
 }
