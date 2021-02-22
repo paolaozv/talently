@@ -28,7 +28,7 @@ export const mutations = {
 // }
 
 export const actions = {
-  async GET_CONTENT({ commit }) {
+  async getContent({ commit }) {
     const { data: content } = await postData('content', this.$axios)
     commit('SET_CONTENT', content)
   },

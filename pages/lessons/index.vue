@@ -3,7 +3,7 @@
     <div class="container-lessons" v-if="content.length > 0">
       <div class="container-content">
         <div>
-          <div class="container-video" :key="currentContent.id">
+          <div class="container-video" :key="`video-${currentContent.id}`">
             <div class="video">
               <client-only>
                 <vimeo-player @ready="onReady" @timeupdate="onTimeUpdate" @loaded="onLoaded" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
@@ -14,7 +14,7 @@
               <p>{{ currentContent.article.slice(0, 200) }}</p>
             </div>
           </div>
-          <i-comments :currentContent="currentContent" />
+          <i-comments :currentContent="currentContent" :key="`comments-${currentContent.id}`" />
         </div>
         <i-lessoncard :content="content" :currentContent="currentContent" />
       </div>
@@ -53,7 +53,7 @@ export default {
       console.log(data, player)
       const progress = Math.floor(data.percent * 10)
       if (updateProgress(progress, this.currentContent.progress)) {
-        this.$store.dispatch('UPDATE_PROGRESS', { ...this.currentContent, progress })
+        this.$store.dispatch('updateProgress', { ...this.currentContent, progress })
       }
     },
     async onLoaded(data, player) {
@@ -67,7 +67,7 @@ export default {
     }
   },
   async asyncData({ store }) {
-    await store.dispatch('GET_CONTENT').then(() => {
+    await store.dispatch('getContent').then(() => {
       const currentContent = setcurrentContent(store.state.content.content);
       store.commit('SET_CURRENT_CONTENT', currentContent)
     })
@@ -109,6 +109,7 @@ export default {
 }
 .video {
   height: 402px;
+  background-color: #343434;
 }
 .text-content {
   padding: 20px;

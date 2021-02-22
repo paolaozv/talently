@@ -4,6 +4,7 @@ export const state = () => ({
   content: [],
   currentContent: null,
   comments: [],
+  selectedComment: null,
 })
 
 export const mutations = {
@@ -22,16 +23,25 @@ export const mutations = {
     state.currentContent = content
   },
   SET_COMMENTS(state, comments) {
-    state.comments = comments
+    state.comments = comments.comments
+  },
+  SELECT_COMMENT(state, id) {
+    state.selectedComment = id
+  },
+  UPDATE_COMMENTS(state, data) {
+    const newComment = { ...data.comment, user: data.user }
+    const comments = state.comments
+    const updateList = [...comments, newComment]
+    state.comments = updateList
   },
 }
 
 export const actions = {
-  async GET_CONTENT({ commit }) {
+  async getContent({ commit }) {
     const { data: content } = await postData('content', this.$axios)
     commit('SET_CONTENT', content)
   },
-  async UPDATE_PROGRESS({ commit }, content) {
+  async updateProgress({ commit }, content) {
     // Next line is before the axios call to avoid making 2 requests. Normally
     // it should be after the call to the server.
     commit('UPDATE_CONTENT', content)
@@ -39,8 +49,19 @@ export const actions = {
       progress: content.progress,
     })
   },
-  async GET_COMMENTS({ commit }, content) {
-    const data = await postData(`content/${content.id}/comments`, this.$axios)
-    // commit('SET_COMMENTS', content)
+  async getComments({ commit }, content) {
+    const { data: comments } = await postData(
+      `content/${content.id}/comments`,
+      this.$axios
+    )
+    commit('SET_COMMENTS', comments)
+  },
+  async createComment({ commit }, data) {
+    const { data: message } = await this.$axios.post(
+      'comment/create',
+      data.comment
+    )
+    const res = { comment: message.message, user: data.user }
+    commit('UPDATE_COMMENTS', res)
   },
 }
