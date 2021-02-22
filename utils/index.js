@@ -29,10 +29,10 @@ export const setcurrentContent = (content) => {
   return firstUncompleted
 }
 
-export const setNextCurrentContent = (content) => {
-  const next = content.filter((el) => el.progress < 10)
+export const setNextCurrentContent = (content, current) => {
   const size = content.length
-  const nextContent = next.length > 0 ? next[0] : content[size - 1]
+  const nextContent =
+    current.id === size ? content[size - 1] : content[current.id]
   return nextContent
 }
 

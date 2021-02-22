@@ -66,7 +66,7 @@ export default {
       }
     },
     onEnded(data, player) {
-      const nextContent = setNextCurrentContent(this.$store.state.content.content)
+      const nextContent = setNextCurrentContent(this.$store.state.content.content, this.currentContent)
       this.$store.commit('SET_CURRENT_CONTENT', nextContent)
     }
   },
