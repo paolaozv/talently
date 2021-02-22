@@ -25,6 +25,13 @@ export const setcurrentContent = (content) => {
   return firstUncompleted
 }
 
+export const setNextCurrentContent = (content) => {
+  const next = content.filter((el) => el.progress < 10)
+  const size = content.length
+  const nextContent = next.length > 0 ? next[0] : content[size - 1]
+  return nextContent
+}
+
 export const updateProgress = (progress, previousProgress) => {
   if (progress !== previousProgress) {
     return true

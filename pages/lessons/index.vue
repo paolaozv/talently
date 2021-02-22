@@ -6,7 +6,7 @@
           <div class="container-video" :key="`video-${currentContent.id}`">
             <div class="video">
               <client-only>
-                <vimeo-player @ready="onReady" @timeupdate="onTimeUpdate" @loaded="onLoaded" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
+                <vimeo-player @ready="onReady" @timeupdate="onTimeUpdate" @loaded="onLoaded" @ended="onEnded" ref="player" :video-id="videoID" :player-height="height" :player-width="width" />
               </client-only>
             </div>
             <div class="text-content">
@@ -26,7 +26,7 @@
 <script>
 import LesonCard from "~/components/LesonCard.vue";
 import Comments from "~/components/Comments";
-import { setcurrentContent, updateProgress } from "~/utils/index";
+import { setcurrentContent, updateProgress, setNextCurrentContent } from "~/utils/index";
 
 export default {
   middleware: 'auth',
@@ -64,6 +64,10 @@ export default {
       } catch (err) {
         console.log("Could not set the progress time", err)
       }
+    },
+    onEnded(data, player) {
+      const nextContent = setNextCurrentContent(this.$store.state.content.content)
+      this.$store.commit('SET_CURRENT_CONTENT', nextContent)
     }
   },
   async asyncData({ store }) {
