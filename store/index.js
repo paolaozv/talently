@@ -58,9 +58,13 @@ export const actions = {
     // Next line is before the axios call to avoid making 2 requests. Normally
     // it should be after the call to the server.
     commit('UPDATE_CONTENT', content)
-    await this.$axios.post(`content/${content.id}/progress`, {
-      progress: content.progress,
-    })
+    await this.$axios.post(
+      `content/${content.id}/progress`,
+      {
+        progress: content.progress,
+      },
+      { progress: false }
+    )
   },
   async getComments({ commit }, content) {
     const { data: comments } = await postData(
