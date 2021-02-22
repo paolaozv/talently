@@ -82,6 +82,7 @@ export const actions = {
     commit('UPDATE_DELETE_COMMENTS', id)
   },
   async updateComment({ commit }, data) {
+    // it should be put but there is no this method for the url
     await this.$axios.post(`comment/${data.id}/update`, {
       content: data.comment,
     })
