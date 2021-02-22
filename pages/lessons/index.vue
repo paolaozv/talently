@@ -50,7 +50,7 @@ export default {
 			this.playerReady = true
 		},
     onTimeUpdate(data, player) {
-      console.log(data, player)
+      // console.log(data, player)
       const progress = Math.floor(data.percent * 10)
       if (updateProgress(progress, this.currentContent.progress)) {
         this.$store.dispatch('updateProgress', { ...this.currentContent, progress })

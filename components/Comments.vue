@@ -21,10 +21,15 @@
             <span>{{ comment.update_at }}</span>
           </div>
           <div>
-            <p class="content">{{ comment.content }}</p>
+            <div v-if="edit && edit.id === comment.id && edit.open" @keydown.esc="cancelEdit">
+              <form @submit.prevent="updateComment">
+                <input type="text" v-model="editInput" class="input input-edit" ref="editInput">
+              </form>
+            </div>
+            <p v-else class="content">{{ comment.content }}</p>
           </div>
         </div>
-        <Options :id="comment.id" />
+        <Options :id="comment.id" :userCommentId="comment.user.id" :content="comment.content" />
       </div>
     </div>
   </div>
@@ -36,7 +41,8 @@ export default {
     return {
       user: this.$auth.user,
       comment: '',
-      errors: {}
+      errors: {},
+      editInput: ''
     }
   },
   props: {
@@ -58,6 +64,9 @@ export default {
     comments() {
       return this.$store.state.comments
     },
+    edit() {
+      return this.$store.state.editComment
+    }
   },
   methods: {
     createComment() {
@@ -71,7 +80,7 @@ export default {
         name: this.user.name
       }
       this.$store.dispatch('createComment', { comment, user })
-      this.comment = ""
+      this.comment = " "
     },
     validateComment(value) {
       if (value.length === 0) {
@@ -80,13 +89,24 @@ export default {
         this.errors['comment'] = '';
       }
     },
+    cancelEdit() {
+      this.$store.commit('EDIT_COMMENT', null)
+    },
+    focusEditInput() {
+      this.editInput = this.edit.content;
+      this.$refs.editInput[0].focus();
+    },
+    updateComment() {
+      this.$store.dispatch('updateComment', { comment: this.editInput, id: this.currentContent.id })
+      this.$store.commit('EDIT_COMMENT', null)
+    }
   }
 }
 </script>
 
 <style lang="css" scoped>
 .container-comments {
-  width: 100%;
+  width: 715px;
   margin-top: 25px;
 }
 .container-input {
@@ -127,5 +147,11 @@ export default {
 }
 .content {
   font-size: 13px;
+}
+.input-edit {
+  width: 100%;
+  border-color: #ECF1F6;
+  background-color: #ECF1F6;
+  margin-top: 5px;
 }
 </style>

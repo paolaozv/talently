@@ -5,6 +5,7 @@ export const state = () => ({
   currentContent: null,
   comments: [],
   selectedComment: null,
+  editComment: null,
 })
 
 export const mutations = {
@@ -33,6 +34,18 @@ export const mutations = {
     const comments = state.comments
     const updateList = [...comments, newComment]
     state.comments = updateList
+  },
+  UPDATE_DELETE_COMMENTS(state, id) {
+    const comments = state.comments
+    const newCommenst = comments.filter((el) => el.id !== id)
+    state.comments = newCommenst
+  },
+  EDIT_COMMENT(state, data) {
+    state.editComment = data
+  },
+  UPDATE_COMMENT(state, data) {
+    const index = state.comments.findIndex((obj) => obj.content_id == data.id)
+    state.comments[index].content = data.comment
   },
 }
 
@@ -63,5 +76,15 @@ export const actions = {
     )
     const res = { comment: message.message, user: data.user }
     commit('UPDATE_COMMENTS', res)
+  },
+  async deleteComment({ commit }, id) {
+    const data = await this.$axios.delete(`comment/${id}`)
+    commit('UPDATE_DELETE_COMMENTS', id)
+  },
+  async updateComment({ commit }, data) {
+    await this.$axios.post(`comment/${data.id}/update`, {
+      content: data.comment,
+    })
+    commit('UPDATE_COMMENT', data)
   },
 }

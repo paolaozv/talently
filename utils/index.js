@@ -26,7 +26,6 @@ export const setcurrentContent = (content) => {
 }
 
 export const updateProgress = (progress, previousProgress) => {
-  console.log('previous', previousProgress, 'now', progress)
   if (progress !== previousProgress) {
     return true
   }
