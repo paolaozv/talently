@@ -21,7 +21,11 @@ export const signout = async () => {
 
 export const setcurrentContent = (content) => {
   const uncompleted = content.filter((el) => el.progress === 0)
-  const firstUncompleted = uncompleted.length > 0 ? uncompleted[0] : content[0]
+  const someUncompleted = content.filter((el) => el.progress < 10)
+  const firstSomeUncompleted =
+    someUncompleted.length > 0 ? someUncompleted[0] : content[0]
+  const firstUncompleted =
+    uncompleted.length > 0 ? uncompleted[0] : firstSomeUncompleted
   return firstUncompleted
 }
 
