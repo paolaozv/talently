@@ -97,7 +97,11 @@ export default {
       this.$refs.editInput[0].focus();
     },
     updateComment() {
-      this.$store.dispatch('updateComment', { comment: this.editInput, id: this.currentContent.id })
+      const user = {
+        id: this.user.id,
+        name: this.user.name
+      }
+      this.$store.dispatch('updateComment', { comment: this.editInput, id: this.edit.id, user })
       this.$store.commit('EDIT_COMMENT', null)
     }
   }

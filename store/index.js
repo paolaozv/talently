@@ -44,8 +44,10 @@ export const mutations = {
     state.editComment = data
   },
   UPDATE_COMMENT(state, data) {
-    const index = state.comments.findIndex((obj) => obj.content_id == data.id)
-    state.comments[index].content = data.comment
+    const element = { ...data.new, user: data.user }
+    const updateComments = state.comments.filter((el) => el.id !== data.id)
+    state.comments =
+      updateComments.length > 0 ? [...updateComments, element] : [element]
   },
 }
 
@@ -76,7 +78,8 @@ export const actions = {
   async createComment({ commit }, data) {
     const { data: message } = await this.$axios.post(
       'comment/create',
-      data.comment
+      data.comment,
+      { progress: false }
     )
     const res = { comment: message.message, user: data.user }
     commit('UPDATE_COMMENTS', res)
@@ -85,11 +88,16 @@ export const actions = {
     const data = await this.$axios.delete(`comment/${id}`)
     commit('UPDATE_DELETE_COMMENTS', id)
   },
-  async updateComment({ commit }, data) {
+  async updateComment({ commit }, obj) {
     // it should be put but there is no this method for the url
-    await this.$axios.post(`comment/${data.id}/update`, {
-      content: data.comment,
-    })
-    commit('UPDATE_COMMENT', data)
+    const { data: data } = await this.$axios.post(
+      `comment/${obj.id}/update`,
+      {
+        content: obj.comment,
+      },
+      { progress: false }
+    )
+    const res = { new: data[0], user: obj.user, id: obj.id }
+    commit('UPDATE_COMMENT', res)
   },
 }
